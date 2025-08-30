@@ -2,20 +2,20 @@ package ecomerece.food.order.controllers;
 
 
 import ecomerece.food.order.dto.OrderRequest;
+import ecomerece.food.order.dto.OrderResponse;
 import ecomerece.food.order.enums.StatusEnum;
 import ecomerece.food.order.models.Order;
 import ecomerece.food.order.services.OrderService;
 import ecomerece.food.order.ultility.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -67,5 +67,17 @@ public class OrderController {
             Map<String, Object> exceptionResponse = BaseResponse.makeResponse(Map.of("message", e.getMessage()), StatusEnum.ERROR.name());
             return ResponseEntity.ok(exceptionResponse);
         }
+    }
+
+    @GetMapping("/orders")
+    public ResponseEntity<Map<String, Object>> getOrders(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "2") int pageSize) throws Exception {
+        Page<OrderResponse> orders = orderService.getOrders(page, pageSize);
+        Map<String, Object> response = Map.of(
+                "items", orders.getContent(),
+                "totalsPage", orders.getTotalPages(),
+                "totalItems", orders.getTotalElements(),
+                "currentPage", orders.getNumber()
+        );
+        return ResponseEntity.ok(BaseResponse.makeResponse(response, StatusEnum.SUCCESS.name()));
     }
 }
