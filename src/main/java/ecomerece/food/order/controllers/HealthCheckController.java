@@ -11,7 +11,6 @@ import java.util.Map;
 @RestController
 @Slf4j
 public class HealthCheckController {
-
     // Api health check
     @GetMapping("/health-check")
     public Map<String, Object> healthCheck() {

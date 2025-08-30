@@ -22,7 +22,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int orderId;
     private int customerId;
-    @OneToMany(mappedBy = "order", cascade =CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order", cascade =CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Food> foods = new ArrayList<>();
     private Date orderDate;
 }
