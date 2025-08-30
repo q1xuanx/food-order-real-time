@@ -1,5 +1,6 @@
 package ecomerece.food.order.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,6 +16,8 @@ public class Food {
     private String foodName;
     private String foodDescription;
     private String price;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_order_id")
+    @JsonBackReference
     private Order order;
 }
