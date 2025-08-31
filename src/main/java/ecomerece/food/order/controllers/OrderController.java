@@ -6,6 +6,7 @@ import ecomerece.food.order.dto.OrderResponse;
 import ecomerece.food.order.enums.StatusEnum;
 import ecomerece.food.order.models.Order;
 import ecomerece.food.order.services.OrderService;
+import ecomerece.food.order.services.RealtimeService;
 import ecomerece.food.order.ultility.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -24,8 +24,10 @@ import java.util.Map;
 @RequestMapping("/api")
 public class OrderController {
     private final OrderService orderService;
+    private final RealtimeService realtimeService;
     // Guest order
     private final int DEFAULT_CUSTOMER_ID = 777;
+
     @PostMapping("/order")
     public ResponseEntity<Map<String,Object>> createOrder(@RequestBody OrderRequest order) throws Exception {
         // Todo: update this function
