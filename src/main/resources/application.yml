@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: dev
   application:
     name: Order Food
 
@@ -19,6 +21,18 @@ spring:
           lob:
             non_contextual_creation: true
     open-in-view: false
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: nhoang2929@gmail.com
+    password: ${emailPassword}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 server:
   port: 8877
+
