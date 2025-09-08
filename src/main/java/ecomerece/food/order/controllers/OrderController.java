@@ -5,6 +5,7 @@ import ecomerece.food.order.dto.OrderRequest;
 import ecomerece.food.order.dto.OrderResponse;
 import ecomerece.food.order.enums.StatusEnum;
 import ecomerece.food.order.models.Order;
+import ecomerece.food.order.services.KafkaProducerService;
 import ecomerece.food.order.services.OrderService;
 import ecomerece.food.order.services.RealtimeService;
 import ecomerece.food.order.ultility.BaseResponse;
@@ -25,7 +26,7 @@ import java.util.Map;
 @RequestMapping("/api")
 public class OrderController {
     private final OrderService orderService;
-    private final RealtimeService realtimeService;
+    private final KafkaProducerService kafkaProducerService;
     // Guest order
     private final int DEFAULT_CUSTOMER_ID = 777;
 
@@ -58,9 +59,10 @@ public class OrderController {
             if (isCreated) {
                 log.info("Order maked successfully");
                 Map<String, Object> orderCreated = Map.of("message", "Order created", "orderAt", makeOrder.getOrderDate());
+                log.info("Start send to producer with order id {}", makeOrder.getOrderId());
+                kafkaProducerService.sendMessage("TopicOrder", String.valueOf(makeOrder.getOrderId()));
                 return ResponseEntity.ok(BaseResponse.makeResponse(orderCreated, StatusEnum.SUCCESS.name()));
             }
-
             log.info("Order making failed");
             Map<String, Object> failedOrder = Map.of("message", "Order failed to be created");
             return ResponseEntity.ok(BaseResponse.makeResponse(failedOrder, StatusEnum.FAILURE.name()));
